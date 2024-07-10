@@ -6,6 +6,8 @@ import { Provider } from "react-redux";
 import store from "./redux/strore.ts";
 import Detail from "./component/main/Detail.tsx";
 import FavMovies from "./component/main/FavMovies.tsx";
+import Login from "./component/header/Login.tsx";
+import SignIn from "./component/header/SignIn.tsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +21,14 @@ const router = createBrowserRouter([
   {
     path: "/fav",
     element: <FavMovies></FavMovies>,
+  },
+  {
+    path: "/login",
+    element: <Login></Login>,
+  },
+  {
+    path: "/signIn",
+    element: <SignIn></SignIn>,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
