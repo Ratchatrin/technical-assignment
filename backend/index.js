@@ -49,3 +49,10 @@ app.post("/login", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+app.get("/test", async (req, res) => {
+  try {
+    res.status(200).json("test");
+  } catch (error) {
+    console.log(error);
+  }
+});

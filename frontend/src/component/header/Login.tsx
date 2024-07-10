@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import Nav from "./Nav";
 
-const API = "https://localhost:3003";
+const API = "https://technical-assignment.onrender.com";
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState(String);

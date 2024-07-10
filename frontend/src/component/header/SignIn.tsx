@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import Nav from "./Nav";
-const API = "https://localhost:3003";
+const API = "https://technical-assignment.onrender.com";
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState(String);
