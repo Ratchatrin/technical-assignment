@@ -16,6 +16,7 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userLogin = async () => {
+    setLoadingData(true);
     try {
       if (username && password.length !== 0) {
         const user = {
@@ -23,10 +24,8 @@ function Login() {
           password,
         };
         const login = await axios.post(`${API}/login`, user);
-        if (login.data === null) {
-          setLoadingData(true);
-        }
         if (login.data.message == "Incorrect password") {
+          setLoadingData(false);
           setUsername("");
           setPassword("");
           setIncorrectPassword(true);
@@ -34,6 +33,7 @@ function Login() {
             setIncorrectPassword(false);
           }, 2000);
         } else if (login.data.message == "User not found") {
+          setLoadingData(false);
           setUsername("");
           setPassword("");
           setUserNOtFound(true);
@@ -48,6 +48,7 @@ function Login() {
           navigate("/");
         }
       } else {
+        setLoadingData(false);
         setEmptyInput(true);
         setTimeout(() => {
           setEmptyInput(false);
@@ -201,6 +202,7 @@ function Login() {
         {loadingData ? (
           <>
             <span className="loading loading-ring loading-lg"></span>
+            <p>Loading</p>
           </>
         ) : (
           <></>

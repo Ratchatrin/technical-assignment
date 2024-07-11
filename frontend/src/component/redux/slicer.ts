@@ -1,3 +1,4 @@
+// src/component/redux/slicer.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface movie {
@@ -42,7 +43,7 @@ interface user {
   favorite: movie[];
 }
 
-interface moviesState {
+export interface moviesState {
   moviesId: number | null;
   user: user;
 }
@@ -68,13 +69,13 @@ const moviesSlicer = createSlice({
     loginUser: (state, action: PayloadAction<user>) => {
       state.user = action.payload;
     },
-    logoutUser : (state,action) => {
-      state.user.favorite= [] ;
+    logoutUser: (state, action) => {
+      state.user.favorite = [];
       state.user.email = action.payload;
       state.user.username = action.payload;
-      state.user.password = action.payload
-      state.user._id = action.payload
-      },
+      state.user.password = action.payload;
+      state.user._id = action.payload;
+    },
     addToFavorite: (state, action: PayloadAction<movie>) => {
       const movie = action.payload;
       const findMovie = state.user.favorite.findIndex((prevMovie) => prevMovie.id === movie.id);
