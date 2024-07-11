@@ -10,8 +10,11 @@ function SignIn() {
   const [password, setPassword] = useState(String);
   const [emptyInput, setEmptyInput] = useState(false);
   const [emailExist, setEmailExist] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
+
   const navigator = useNavigate();
   const signIn = async () => {
+    setLoadingData(true);
     try {
       if (email && username && password.length !== 0) {
         const user = {
@@ -160,6 +163,14 @@ function SignIn() {
             <></>
           )}
         </div>
+        {loadingData ? (
+          <>
+            <span className="loading loading-ring loading-lg"></span>
+            <p>Loading</p>
+          </>
+        ) : (
+          <></>
+        )}
       </section>
     </>
   );

@@ -9,9 +9,11 @@ function Reset() {
   const [email, setEmail] = useState(String);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
   const [complete, setComplete] = useState(false);
   const navigate = useNavigate();
   const resetPassword = async () => {
+    setLoadingData(true);
     try {
       const user = { email, newPassword };
       const changePassword = await axios.put(`${API}/resetPassword`, user);
@@ -145,6 +147,14 @@ function Reset() {
                   Click
                 </button>
               </div>
+            </>
+          ) : (
+            <></>
+          )}
+          {loadingData ? (
+            <>
+              <span className="loading loading-ring loading-lg"></span>
+              <p>Loading</p>
             </>
           ) : (
             <></>
