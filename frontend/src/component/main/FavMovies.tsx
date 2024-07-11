@@ -73,7 +73,7 @@ function FavMovies() {
   const dispatch = useDispatch();
   const user = useSelector((state: state) => state.movies.user);
   const genresURL = "https://api.themoviedb.org/3/genre/movie/list";
-  const addFavURL = `http://localhost:3003/delete/${user._id}`;
+  const addFavURL = `https://technical-assignment.onrender.com/delete/${user._id}`;
   const getGenres = (genres: genres) => {
     if (genreArr.length === 0) {
       setGenreArr((prevGenres) => {

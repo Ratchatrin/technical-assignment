@@ -3,7 +3,7 @@ import Footer from "../footer/Footer";
 import Nav from "./Nav";
 import axios from "axios";
 import { useState } from "react";
-const API = "http://localhost:3003";
+const API = "https://technical-assignment.onrender.com";
 function Reset() {
   const [newPassword, setNewPassword] = useState(String);
   const [email, setEmail] = useState(String);

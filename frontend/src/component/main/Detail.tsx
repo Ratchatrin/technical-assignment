@@ -111,7 +111,7 @@ function Detail() {
   const URL = "https://api.themoviedb.org/3/movie/";
   const actorURL = `https://api.themoviedb.org/3/movie/${moviesId}/credits`;
   const reviewURL = `https://api.themoviedb.org/3/movie/${moviesId}/reviews`;
-  const addFavURL = "http://localhost:3003";
+  const addFavURL = "https://technical-assignment.onrender.com";
   const user = useSelector((state: state) => state.movies.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
