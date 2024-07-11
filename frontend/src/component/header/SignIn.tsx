@@ -24,6 +24,7 @@ function SignIn() {
         };
         const signIn = await axios.post(`${API}/signIn`, user);
         if (signIn.status === 208) {
+          setLoadingData(false);
           setEmailExist(true);
           setTimeout(() => {
             setEmailExist(false);
@@ -34,6 +35,7 @@ function SignIn() {
         }
         navigator("/login");
       } else {
+        setLoadingData(false);
         setEmptyInput(true);
         setTimeout(() => {
           setEmptyInput(false);

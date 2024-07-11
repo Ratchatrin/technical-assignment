@@ -19,11 +19,13 @@ function Reset() {
       const changePassword = await axios.put(`${API}/resetPassword`, user);
       console.log(changePassword.status);
       if (changePassword.status === 200) {
+        setLoadingData(false);
         setComplete(true);
         setNewPassword("");
         setEmail("");
       }
     } catch (error) {
+      setLoadingData(false);
       setNewPassword("");
       setEmail("");
       setError(true);
