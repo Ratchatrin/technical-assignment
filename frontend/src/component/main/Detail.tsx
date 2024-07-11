@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Footer from "../footer/Footer";
 import Nav from "../header/Nav";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,11 +10,8 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import "./styles.css";
 import { Grid, Pagination, Scrollbar } from "swiper/modules";
-interface state {
-  movies: {
-    moviesId: number;
-  };
-}
+import { addToFavorite } from "../redux/slicer.ts";
+import { useNavigate } from "react-router-dom";
 interface movies {
   adult: boolean;
   backdrop_path: string;
@@ -91,6 +88,18 @@ interface review {
   total_pages: number;
   total_results: number;
 }
+interface state {
+  movies: {
+    moviesId: number;
+    user: {
+      _id: string;
+      email: string;
+      favorite: [];
+      password: string;
+      username: string;
+    };
+  };
+}
 function Detail() {
   const [moviesDetail, setMoviesDetail] = useState<movies[]>([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -102,31 +111,37 @@ function Detail() {
   const URL = "https://api.themoviedb.org/3/movie/";
   const actorURL = `https://api.themoviedb.org/3/movie/${moviesId}/credits`;
   const reviewURL = `https://api.themoviedb.org/3/movie/${moviesId}/reviews`;
-  console.log(moviesDetail);
+  const addFavURL = "http://localhost:3003";
+  const user = useSelector((state: state) => state.movies.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const updateWindowWidth = () => {
     setWindowWidth(window.innerWidth);
   };
-  const addToLocalState = (newMovie: movies) => {
-    const existingData = localStorage.getItem("favMovies");
-    let favoriteRecipes = [];
-    if (existingData) {
-      favoriteRecipes = JSON.parse(existingData);
-    }
-    const findExist = favoriteRecipes.findIndex(
-      (data: movies) => data.id === newMovie.id
-    );
-    if (findExist === -1) {
-      favoriteRecipes.push(newMovie);
-      localStorage.setItem("favMovies", JSON.stringify(favoriteRecipes));
-      setComplete(true);
-      setTimeout(() => {
-        setComplete(false);
-      }, 1500);
-    } else {
-      setExist(true);
-      setTimeout(() => {
-        setExist(false);
-      }, 1500);
+  const addToFavorites = async (newMovie: movies) => {
+    try {
+      if (user.username === null) {
+        navigate("/login");
+      } else {
+        const response = await axios.post(
+          `${addFavURL}/addFav/${user._id}`,
+          newMovie
+        );
+        if (response.data === "Add Complete") {
+          dispatch(addToFavorite(newMovie));
+          setComplete(true);
+          setTimeout(() => {
+            setComplete(false);
+          }, 1500);
+        } else {
+          setExist(true);
+          setTimeout(() => {
+            setExist(false);
+          }, 1500);
+        }
+      }
+    } catch (error) {
+      console.error("Error adding to favorites:", error);
     }
   };
   window.addEventListener("resize", updateWindowWidth);
@@ -183,7 +198,7 @@ function Detail() {
                               <>
                                 <button
                                   onClick={() => {
-                                    addToLocalState(detail);
+                                    addToFavorites(detail);
                                   }}
                                   className="btn btn-success border-2 hover:bg-transparent hover:text-white"
                                 >
@@ -192,12 +207,7 @@ function Detail() {
                               </>
                             ) : (
                               <>
-                                <button
-                                  onClick={() => {
-                                    addToLocalState(detail);
-                                  }}
-                                  className="btn btn-error border-2 hover:bg-transparent hover:text-white"
-                                >
+                                <button className="btn btn-error border-2 hover:bg-transparent hover:text-white">
                                   Already Add
                                 </button>
                               </>
@@ -205,12 +215,7 @@ function Detail() {
                           </>
                         ) : (
                           <>
-                            <button
-                              onClick={() => {
-                                addToLocalState(detail);
-                              }}
-                              className="btn btn-success border-2 hover:bg-transparent hover:text-white"
-                            >
+                            <button className="btn btn-success border-2 hover:bg-transparent hover:text-white">
                               Add Complete
                             </button>
                           </>

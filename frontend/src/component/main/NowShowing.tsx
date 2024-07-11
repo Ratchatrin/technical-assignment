@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { getName } from "../../redux/slicer";
+import { getName } from "../redux/slicer";
 
 interface movies {
   adult: boolean;
@@ -170,8 +170,8 @@ function NowShowing() {
               <>
                 {genreArr.length !== 0 ? (
                   <>
-                    <section className="flex flex-col justify-center items-center w-9/12 max-w-11/12">
-                      <div className="w-full flex justify-between items-center mt-3 p-3">
+                    <section className="flex flex-col justify-center items-center w-full">
+                      <div className="w-full flex justify-between items-center mt-3 p-3 max-w-6xl">
                         <button
                           className={`btn btn-info ${
                             page == 1 ? "btn-disabled" : ""
@@ -299,12 +299,12 @@ function NowShowing() {
                         </>
                       ) : (
                         <>
-                          <div className="flex justify-center items-center h-96 w-full">
+                          <div className="flex justify-center items-center h-96 w-full ">
                             <p>Not found :(</p>
                           </div>
                         </>
                       )}
-                      <div className="w-full flex justify-between items-center mt-3 px-2">
+                      <div className="w-full flex justify-between items-center mt-3 px-2 max-w-6xl">
                         <button
                           className={`btn btn-info ${
                             page == 1 ? "btn-disabled" : ""
@@ -341,8 +341,8 @@ function NowShowing() {
                   </>
                 ) : (
                   <>
-                    <section className="flex flex-col justify-center items-center  w-9/12 max-w-11/12">
-                      <div className="w-full flex justify-between items-center mt-3 p-3">
+                    <section className="flex flex-col justify-center items-center  w-full">
+                      <div className="w-full flex justify-between items-center mt-3 p-3 max-w-6xl">
                         <button
                           className={`btn btn-info ${
                             page == 1 ? "btn-disabled" : ""
@@ -447,7 +447,7 @@ function NowShowing() {
                         </>
                       )}
 
-                      <div className="w-full flex justify-between items-center mt-3 px-2">
+                      <div className="w-full flex justify-between items-center mt-3 px-2 max-w-6xl">
                         <button
                           className={`btn btn-info ${
                             page == 1 ? "btn-disabled" : ""
@@ -488,8 +488,8 @@ function NowShowing() {
               <>
                 {genreArr.length !== 0 ? (
                   <>
-                    <section className="flex flex-col justify-center items-center w-9/12 max-w-11/12">
-                      <div className="w-full flex justify-between items-center mt-3 p-3">
+                    <section className="flex flex-col justify-center items-center w-full">
+                      <div className="w-full flex justify-between items-center mt-3 p-3 max-w-6xl">
                         <button
                           className={`btn btn-info ${
                             page == 1 ? "btn-disabled" : ""
@@ -622,7 +622,7 @@ function NowShowing() {
                           </div>
                         </>
                       )}
-                      <div className="w-full flex justify-between items-center mt-3 px-2">
+                      <div className="w-full flex justify-between items-center mt-3 px-2 max-w-6xl">
                         <button
                           className={`btn btn-info ${
                             page == 1 ? "btn-disabled" : ""
@@ -659,8 +659,8 @@ function NowShowing() {
                   </>
                 ) : (
                   <>
-                    <section className="flex flex-col justify-center items-center w-9/12 max-w-11/12">
-                      <div className="w-full flex justify-between items-center mt-3 p-3">
+                    <section className="flex flex-col justify-center items-center w-full">
+                      <div className="w-full flex justify-between items-center mt-3 p-3 max-w-6xl">
                         <button
                           className={`btn btn-info ${
                             page == 1 ? "btn-disabled" : ""
@@ -754,7 +754,7 @@ function NowShowing() {
                           );
                         })}
                       </div>
-                      <div className="w-full flex justify-between items-center mt-3 px-2">
+                      <div className="w-full flex justify-between items-center mt-3 px-2 max-w-6xl">
                         <button
                           className={`btn btn-info ${
                             page == 1 ? "btn-disabled" : ""

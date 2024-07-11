@@ -3,11 +3,12 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./component/main/Home.tsx";
 import { Provider } from "react-redux";
-import store from "./redux/strore.ts";
+import store from "./component/redux/strore.ts";
 import Detail from "./component/main/Detail.tsx";
 import FavMovies from "./component/main/FavMovies.tsx";
 import Login from "./component/header/Login.tsx";
 import SignIn from "./component/header/SignIn.tsx";
+import Reset from "./component/header/Reset.tsx";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: "/signIn",
     element: <SignIn></SignIn>,
+  },
+  {
+    path: "/reset",
+    element: <Reset></Reset>,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(

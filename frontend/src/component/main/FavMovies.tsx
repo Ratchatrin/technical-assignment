@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getName } from "../../redux/slicer";
+import { getName, deleteToFavorite } from "../redux/slicer";
 
 interface movies {
   adult: boolean;
@@ -49,6 +49,18 @@ interface genres {
   id: number;
   name: string;
 }
+interface state {
+  movies: {
+    moviesId: number;
+    user: {
+      _id: string;
+      email: string;
+      favorite: [];
+      password: string;
+      username: string;
+    };
+  };
+}
 function FavMovies() {
   const [favMovies, setFavMovies] = useState<movies[]>([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -59,7 +71,9 @@ function FavMovies() {
   const [search, setSearch] = useState(String);
   const [combineResult, setCombineResult] = useState<movies[]>([]);
   const dispatch = useDispatch();
+  const user = useSelector((state: state) => state.movies.user);
   const genresURL = "https://api.themoviedb.org/3/genre/movie/list";
+  const addFavURL = `http://localhost:3003/delete/${user._id}`;
   const getGenres = (genres: genres) => {
     if (genreArr.length === 0) {
       setGenreArr((prevGenres) => {
@@ -79,6 +93,15 @@ function FavMovies() {
   };
   const updateWindowWidth = () => {
     setWindowWidth(window.innerWidth);
+  };
+  const deleteMovies = async (movies: movies) => {
+    try {
+      const respond = await axios.post(addFavURL, movies);
+      dispatch(deleteToFavorite(movies));
+      console.log(respond);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   window.addEventListener("resize", updateWindowWidth);
@@ -145,15 +168,9 @@ function FavMovies() {
     };
     combine();
   }, [filterArr, searchResult]);
-  const getDataFromLocalStorage = () => {
-    const fav = localStorage.getItem("favMovies");
-    if (fav !== null) {
-      setFavMovies(JSON.parse(fav));
-    }
-  };
   useEffect(() => {
-    getDataFromLocalStorage();
-  }, []);
+    setFavMovies(user.favorite);
+  }, [user]);
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full h-full">
@@ -193,8 +210,8 @@ function FavMovies() {
               <>
                 {genreArr.length !== 0 ? (
                   <>
-                    <section className="flex flex-col justify-center items-center w-9/12 max-w-11/12">
-                      <div className="grid grid-cols-2 gap-3 justify-items-center w-6/12">
+                    <section className="flex flex-col justify-center items-center w-full">
+                      <div className="grid grid-cols-2 gap-3 justify-items-center min-w-6/12">
                         {genreArr.map((list) => {
                           return (
                             <>
@@ -235,15 +252,15 @@ function FavMovies() {
                             {combineResult.map((movies: movies) => {
                               return (
                                 <>
-                                  <Link
-                                    to="/detail"
-                                    className="flex justify-center items-center"
+                                  <div
+                                    onClick={() => {
+                                      dispatch(getName(movies.id));
+                                    }}
+                                    className="flex flex-col font-bold text-sm justify-center min-w-48 items-center rounded-lg bg-white w-8/12 max-w-xs m-2 p-3 text-black"
                                   >
-                                    <div
-                                      onClick={() => {
-                                        dispatch(getName(movies.id));
-                                      }}
-                                      className="flex flex-col font-bold text-sm justify-center min-w-48 items-center rounded-lg bg-white w-8/12 max-w-xs m-5 p-3 text-black"
+                                    <Link
+                                      to="/detail"
+                                      className="flex justify-center items-center flex-col"
                                     >
                                       <img
                                         src={`https://image.tmdb.org/t/p/w500${movies.poster_path}`}
@@ -272,8 +289,11 @@ function FavMovies() {
                                           );
                                         })}
                                       </div>
-                                    </div>
-                                  </Link>
+                                    </Link>{" "}
+                                    <button className="btn btn-error">
+                                      Delete
+                                    </button>
+                                  </div>
                                 </>
                               );
                             })}
@@ -290,7 +310,7 @@ function FavMovies() {
                   </>
                 ) : (
                   <>
-                    <section className="flex flex-col justify-center items-center w-9/12 max-w-11/12">
+                    <section className="flex flex-col justify-center items-center w-full">
                       {searchResult.length !== 0 ? (
                         <>
                           <div
@@ -303,15 +323,15 @@ function FavMovies() {
                             {searchResult.map((movies: movies) => {
                               return (
                                 <>
-                                  <Link
-                                    to="/detail"
-                                    className="flex justify-center items-center"
+                                  <div
+                                    onClick={() => {
+                                      dispatch(getName(movies.id));
+                                    }}
+                                    className="flex flex-col font-bold text-sm justify-center min-w-48 items-center rounded-lg bg-white w-8/12 max-w-xs m-2 p-3 text-black"
                                   >
-                                    <div
-                                      onClick={() => {
-                                        dispatch(getName(movies.id));
-                                      }}
-                                      className="flex flex-col font-bold text-sm justify-center min-w-48 items-center rounded-lg bg-white w-8/12 max-w-xs m-5 p-3 text-black"
+                                    <Link
+                                      to="/detail"
+                                      className="flex justify-center items-center flex-col"
                                     >
                                       <img
                                         src={`https://image.tmdb.org/t/p/w500${movies.poster_path}`}
@@ -340,8 +360,11 @@ function FavMovies() {
                                           );
                                         })}
                                       </div>
-                                    </div>
-                                  </Link>
+                                    </Link>
+                                    <button className="btn btn-error">
+                                      Delete
+                                    </button>
+                                  </div>
                                 </>
                               );
                             })}
@@ -362,7 +385,7 @@ function FavMovies() {
               <>
                 {genreArr.length !== 0 ? (
                   <>
-                    <section className="flex flex-col justify-center items-center w-9/12 max-w-11/12">
+                    <section className="flex flex-col justify-center items-center w-full">
                       <div className="grid grid-cols-2 gap-3 justify-items-center min-w-6/12 ">
                         {genreArr.map((list) => {
                           return (
@@ -404,15 +427,15 @@ function FavMovies() {
                             {filterArr.map((movies: movies) => {
                               return (
                                 <>
-                                  <Link
-                                    to="/detail"
-                                    className="flex justify-center items-center"
+                                  <div
+                                    onClick={() => {
+                                      dispatch(getName(movies.id));
+                                    }}
+                                    className="flex flex-col font-bold text-sm justify-center min-w-48 items-center rounded-lg bg-white w-8/12 max-w-xs m-2 p-3 text-black"
                                   >
-                                    <div
-                                      onClick={() => {
-                                        dispatch(getName(movies.id));
-                                      }}
-                                      className="flex flex-col font-bold text-sm justify-center min-w-48 items-center rounded-lg bg-white w-8/12 max-w-xs m-5 p-3 text-black"
+                                    <Link
+                                      to="/detail"
+                                      className="flex justify-center items-center flex-col"
                                     >
                                       <img
                                         src={`https://image.tmdb.org/t/p/w500${movies.poster_path}`}
@@ -441,8 +464,11 @@ function FavMovies() {
                                           );
                                         })}
                                       </div>
-                                    </div>
-                                  </Link>
+                                    </Link>
+                                    <button className="btn btn-error">
+                                      Delete
+                                    </button>
+                                  </div>
                                 </>
                               );
                             })}
@@ -459,7 +485,7 @@ function FavMovies() {
                   </>
                 ) : (
                   <>
-                    <section className="flex flex-col justify-center items-center w-9/12 max-w-11/12">
+                    <section className="flex flex-col justify-center items-center w-full">
                       <div
                         className={`${
                           windowWidth < 767
@@ -470,15 +496,15 @@ function FavMovies() {
                         {favMovies.map((movies: movies) => {
                           return (
                             <>
-                              <Link
-                                to="/detail"
-                                className="flex justify-center items-center"
+                              <div
+                                onClick={() => {
+                                  dispatch(getName(movies.id));
+                                }}
+                                className="flex flex-col font-bold text-sm justify-center min-w-48 items-center rounded-lg bg-white w-8/12 max-w-xs m-2 p-3 text-black"
                               >
-                                <div
-                                  onClick={() => {
-                                    dispatch(getName(movies.id));
-                                  }}
-                                  className="flex flex-col font-bold text-sm justify-center min-w-48 items-center rounded-lg bg-white w-8/12 max-w-xs m-5 p-3 text-black"
+                                <Link
+                                  to="/detail"
+                                  className="flex justify-center items-center flex-col "
                                 >
                                   <img
                                     src={`https://image.tmdb.org/t/p/w500${movies.poster_path}`}
@@ -507,8 +533,16 @@ function FavMovies() {
                                       );
                                     })}
                                   </div>
-                                </div>
-                              </Link>
+                                </Link>
+                                <button
+                                  className="btn btn-error mt-2"
+                                  onClick={() => {
+                                    deleteMovies(movies);
+                                  }}
+                                >
+                                  Delete
+                                </button>
+                              </div>
                             </>
                           );
                         })}
@@ -521,9 +555,22 @@ function FavMovies() {
           </>
         ) : (
           <>
-            <section className="w-full h-dvh flex justify-center items-center">
-              <span className="loading loading-ring loading-lg"></span>
-            </section>
+            {user._id !== null ? (
+              <>
+                <section className="w-full h-dvh flex justify-center items-center flex-col">
+                  <p>Empty Favorite Movies :(</p>
+                </section>
+              </>
+            ) : (
+              <>
+                <section className="w-full h-dvh flex justify-center flex-col  items-center">
+                  <p>Please Login</p>
+                  <Link to="/login">
+                    <button className="btn btn-info mt-5">Go to Login</button>
+                  </Link>
+                </section>
+              </>
+            )}
           </>
         )}
       </div>

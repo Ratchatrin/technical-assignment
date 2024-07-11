@@ -2,7 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import Nav from "./Nav";
-
+import { useDispatch } from "react-redux";
+import { loginUser } from "../redux/slicer.ts";
 const API = "https://technical-assignment.onrender.com";
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,6 +12,8 @@ function Login() {
   const [emptyInput, setEmptyInput] = useState(false);
   const [incorrectPassword, setIncorrectPassword] = useState(false);
   const [userNotFound, setUserNOtFound] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const userLogin = async () => {
     try {
@@ -20,6 +23,9 @@ function Login() {
           password,
         };
         const login = await axios.post(`${API}/login`, user);
+        if (login.data === null) {
+          setLoadingData(true);
+        }
         if (login.data.message == "Incorrect password") {
           setUsername("");
           setPassword("");
@@ -35,6 +41,8 @@ function Login() {
             setUserNOtFound(false);
           }, 2000);
         } else {
+          setLoadingData(false);
+          dispatch(loginUser(login.data));
           setUsername("");
           setPassword("");
           navigate("/");
@@ -117,7 +125,7 @@ function Login() {
               <a className="link link-hover ml-5 underline ">Click</a>
             </div>
           </Link>
-          <Link to="/resetPassword">
+          <Link to="/reset">
             <div className="flex justify-evenly -3 mb-3 mt-3 font-bold">
               <p>Reset Password</p>
               <p className="ml-5 underline ">Click</p>
@@ -190,6 +198,13 @@ function Login() {
             <></>
           )}
         </div>
+        {loadingData ? (
+          <>
+            <span className="loading loading-ring loading-lg"></span>
+          </>
+        ) : (
+          <></>
+        )}
       </section>
     </>
   );
