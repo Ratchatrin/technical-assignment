@@ -68,15 +68,13 @@ const moviesSlicer = createSlice({
     loginUser: (state, action: PayloadAction<user>) => {
       state.user = action.payload;
     },
-    logoutUser: (state) => {
-      state.user = {
-        _id: null,
-        email: null,
-        username: null,
-        password: null,
-        favorite: [],
-      };
-    },
+    logoutUser : (state,action) => {
+      state.user.favorite= [] ;
+      state.user.email = action.payload;
+      state.user.username = action.payload;
+      state.user.password = action.payload
+      state.user._id = action.payload
+      },
     addToFavorite: (state, action: PayloadAction<movie>) => {
       const movie = action.payload;
       const findMovie = state.user.favorite.findIndex((prevMovie) => prevMovie.id === movie.id);
